@@ -37,6 +37,21 @@ app.get('/korisnici', async (req,res) => {
     res.json(finalData);
 });
 
+app.get('/secret', [auth.verify], (req, res) => {
+    res.json({ message: 'Tajna ruta, vaš email: ' + req.jwt.Email });
+});
+
+app.post('/auth', async (req, res) => {
+    let user = await req.body;
+    try {
+        let finalData = await auth.authenticateUser(user.Email, user.Lozinka);
+        res.json(finalData);
+    }
+    catch(e) {
+        res.status(401).json({ error: e.message })
+    }
+});
+
 
    
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))

@@ -1,6 +1,7 @@
 import mongo from 'mongodb';
 import connect from './db';
-
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 (async () => {
     let db = await connect();
@@ -14,7 +15,7 @@ export default {
         let doc = {
             Ime_i_prezime: user.Ime_i_prezime,
             Email: user.Email,
-            Lozinka: user.Lozinka
+            Lozinka: await bcrypt.hash(user.Lozinka, 8),
         }
         try{
             let result = await db.collection('korisnik').insertOne(doc);
@@ -28,4 +29,44 @@ export default {
         }
     },
 
-     }
+    async authenticateUser(Email, Lozinka) {
+        let db = await connect();
+        let userData = await db.collection('korisnik').findOne({ Email: Email })
+        
+        if (userData && userData.Lozinka && (await bcrypt.compare(Lozinka, userData.Lozinka))){
+            delete userData.Lozinka
+            let token = jwt.sign(userData, process.env.JWT_SECRET, {
+                algorithm: 'HS512',
+                expiresIn: '2 weeks'
+            })
+            
+            return {
+                token,
+                Email: userData.Email
+            }
+
+        }
+        else {
+            throw new Error('Cannot authenticate')
+        }
+    },
+    async verify(req, res, next) {
+        try {
+            let authorization = await req.headers.authorization.split(' ');
+            let type = authorization[0];
+            let token = authorization[1];
+            if (type !== 'Bearer') {
+                return res.status(401).send();
+            }
+            else{
+                req.jwt = jwt.verify(token, process.env.JWT_SECRET);
+                
+                return next();
+            }
+        }
+        catch (e) {
+            return res.status(401).send();
+        }
+    }
+
+}
