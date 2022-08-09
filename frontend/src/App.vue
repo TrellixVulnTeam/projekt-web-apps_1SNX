@@ -1,4 +1,5 @@
 <template>
+<div>
   <header id="header"><!--header-->
 		
 		
@@ -17,7 +18,9 @@
 								<!--<li><router-link to="#"><i class="fa fa-user"></i> Profil</router-link></li>-->
 								<li><router-link to="#"><i class="fa fa-star"></i> Lista želja</router-link></li>
 								<li><router-link to="/cart"><i class="fa fa-shopping-cart"></i> Košarica</router-link></li>
-								<li><router-link to="/login"><i class="fa fa-lock"></i> Prijava</router-link></li>
+								<li v-if="!auth.authenticated"><router-link to="/login"><i class="fa fa-lock"></i> Prijava</router-link></li>
+								<li v-if="auth.authenticated" class="username"><i class="fa fa-user"></i><p style="display:inline;margin-left:5px"> {{auth.userEmail}}</p></li>
+								<li v-if="auth.authenticated" @click="logout()"><router-link to=""><i class="fa fa-sign-out"></i> Odjava</router-link></li>
 								<br>
 							</ul>
 						</div>
@@ -41,23 +44,6 @@
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="/" >Početna</a></li>
-								<!--<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html">Products</a></li>
-										<li><a href="product-details.html">Product Details</a></li> 
-										<li><a href="checkout.html">Checkout</a></li> 
-										<li><a href="cart.html">Cart</a></li> 
-										<li><a href="login.html">Login</a></li> 
-                                    </ul>
-                                </li> -->
-								<!--
-								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">Blog List</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
-                                    </ul>
-                                </li> 
-								<li><a href="404.html">404</a></li>-->
 								<li><router-link to="/contact">Kontakt</router-link></li>
 								
 							</ul>
@@ -70,10 +56,34 @@
 					</div>
 				</div>
 			</div>
-		</div><!--/header-bottom-->
-	</header><!--/header-->
+		</div>
+	</header>
   <router-view/>
+</div>
 </template>
+
+<script>
+
+import { Auth } from '@/services';
+
+export default {
+	data(){
+		return {
+			auth: Auth.state,
+		};
+	},
+	methods:{
+		logout(){
+			Auth.logout();
+			this.$router.push({ name: 'Login' });
+		}
+	},
+	created(){
+		console.log(Auth.userEmail);
+	}
+}
+
+</script>
 
 <style scoped>
 

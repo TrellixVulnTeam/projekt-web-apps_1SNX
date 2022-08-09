@@ -56,6 +56,16 @@ a#scrollUp i{
   font-size: 30px;
 }
 
+.username {
+  background: lightblue;
+  color: #696763;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 0;
+  padding-right: 0;
+  margin-top: 10px;
+}
 
 /*************************
 *******Header CSS******

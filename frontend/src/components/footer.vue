@@ -60,7 +60,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'footer',
   props: {
     msg: String
   }

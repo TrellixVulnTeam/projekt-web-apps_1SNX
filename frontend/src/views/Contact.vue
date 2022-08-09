@@ -1,4 +1,5 @@
 <template>
+<div>
     <div id="contact-page" class="container">
     	<div class="bg">
 	    	<div class="row">    		
@@ -35,9 +36,11 @@
 	    			</div>
     			</div>    			
 	    	</div>  
-    	</div>	
-    </div><!--/#contact-page--> <br>
+    	</div>	<br>
+		
+    </div><!--/#contact-page--> 
     <Footer />
+</div>
 </template>
 
 <script>

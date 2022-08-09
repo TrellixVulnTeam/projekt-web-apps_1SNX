@@ -1,4 +1,5 @@
 <template>
+<div>
     <section id="cart_items">
 		<div class="container">
             <br><br>
@@ -146,6 +147,7 @@
         
 	</section><!--/#do_action-->
     <Footer />
+</div>
 </template>
 
 <script>
