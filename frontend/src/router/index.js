@@ -27,7 +27,12 @@ const routes = [
     props: true,
     name: 'Drinks',
     component: () => import('../views/Drinks.vue'),
-},
+  },
+  {
+    path: '/add_product',
+    name: 'AddProduct',
+    component: () => import('../views/AddProduct.vue'),
+  },
 ]
 
 const router = createRouter({

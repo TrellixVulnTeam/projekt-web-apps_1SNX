@@ -58,7 +58,7 @@
 											<div class="overlay-content">
 												<h2>{{item.cijena}} kn</h2>
 												<p>{{item.proizvod}}</p>
-												<button @click.prevent="RouteName(item)" class="btn btn-default add-to-cart">Detalji</button>
+												<button @click.prevent="RouteName(item)" class="btn btn-default add-to-cart">Detalji</button><br>
 												<router-link to="/cart" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</router-link>
 											</div>
 										</div>

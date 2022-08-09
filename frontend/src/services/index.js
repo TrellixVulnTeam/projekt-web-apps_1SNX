@@ -84,4 +84,10 @@ let Auth = {
     }
 }
 
-export { Service, Auth }
+let Products = {
+    postProducts(podaci){
+        return Service.post('/proizvodi', podaci);
+    }
+}
+
+export { Service, Auth, Products }

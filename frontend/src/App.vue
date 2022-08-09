@@ -1,7 +1,7 @@
 <template>
 <div>
   <header id="header"><!--header-->
-		
+			
 		
 		<div class="header-middle"><!--header-middle-->
 			<div class="container">
@@ -45,7 +45,7 @@
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="/" >Početna</a></li>
 								<li><router-link to="/contact">Kontakt</router-link></li>
-								
+								<li><router-link to="/add_product">Dodaj piće</router-link></li>
 							</ul>
 						</div>
 					</div>

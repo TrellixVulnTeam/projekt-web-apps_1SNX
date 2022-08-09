@@ -6,7 +6,7 @@
 				<input v-model="ime_prezime" type="text" placeholder="Ime i prezime"/>
 				<input v-model="email" type="email" placeholder="Email" />
 				<input v-model="lozinka" type="password" placeholder="Lozinka"/>
-				<button type="submit" class="btn btn-default" @click="Register(ime_prezime,email,lozinka)">Registracija</button>
+				<button type="submit" class="btn btn-default" @click="Register()">Registracija</button>
 			</form>
 		</div>
 	</div>
@@ -27,11 +27,11 @@ export default {
 		};
     },
     methods:{
-        async Register(ime_prezime,email,lozinka){
+        async Register(){
             let data = {
-                Ime_i_prezime:ime_prezime,
-                Email:email, 
-                Lozinka:lozinka,
+                Ime_i_prezime:this.ime_prezime,
+                Email:this.email, 
+                Lozinka:this.lozinka,
             }
             await Auth.SendRegisterData(data).then(() => {
                 this.$router.push({ path: '/login' });
