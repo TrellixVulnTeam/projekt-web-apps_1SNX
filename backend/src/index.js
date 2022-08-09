@@ -52,6 +52,25 @@ app.post('/auth', async (req, res) => {
     }
 });
 
+app.post ('/proizvodi', async (req , res) => {
+    let db = await connect();
+    let  proizvodi = req.body;
+
+    let result = await db.collection('proizvodi').insertOne(proizvodi);
+    if (result.insertedCount == 1) {
+        res.send({
+            status: 'success',
+            id: result.insertedId,
+        });
+    } 
+    else {
+        res.send({
+            status: 'fail',
+        });
+    }
+    
+    console.log(result);
+});
 
    
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))
