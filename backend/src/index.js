@@ -72,5 +72,22 @@ app.post ('/proizvodi', async (req , res) => {
     console.log(result);
 });
 
+app.get('/proizvodi', async (req,res) => {
+    let db = await connect()
+    
+    let data = await db.collection("proizvodi").find({})
+    let allProducts = await data.toArray();
+    
+    res.json(allProducts);
+});
+
+app.get('/proizvodi/:naziv', async (req , res) => {
+    let nazivProizvoda = req.params.naziv;
+    let db = await connect();
+    let singleDoc = await db.collection("proizvodi").findOne({naziv: nazivProizvoda})
+
+    console.log(singleDoc)
+    res.json(singleDoc)
+});
    
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))
