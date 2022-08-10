@@ -87,7 +87,38 @@ let Auth = {
 let Products = {
     postProducts(podaci){
         return Service.post('/proizvodi', podaci);
-    }
+    },
+    async fetchProducts(){
+        
+            let response = await Service.get(`/proizvodi`);
+            let data = response.data;
+            data=data.map((docProduct)=>{
+            return {
+                    id: docProduct._id,
+                    naziv: docProduct.naziv,
+                    vrste: docProduct.vrste,
+                    cijena: docProduct.cijena,
+                    opis: docProduct.opis,
+                    slika: docProduct.slika,
+            }      
+            });
+            
+            return data;
+    },
+    async singleProduct(naziv){
+
+        let response = await Service.get(`/proizvodi/${naziv}`);
+        console.log(response);
+        let singleDoc = response.data;
+        
+        return {
+            naziv: singleDoc.naziv,
+            vrste: singleDoc.vrste,
+            cijena: singleDoc.cijena,
+            opis: singleDoc.opis,
+            slika: singleDoc.slika,
+        };
+    }, 
 }
 
 export { Service, Auth, Products }

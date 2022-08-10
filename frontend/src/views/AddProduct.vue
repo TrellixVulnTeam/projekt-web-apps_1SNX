@@ -19,14 +19,14 @@
             <label for="name" class="col-sm-3 control-label">Vrsta pića</label>
             <div class="col-sm-6">
                 <select v-model="vrste" class="form-control">
-                    <option style="text-align:center" selected>--- Odaberite vrstu svog pića ---</option>
-                    <option value="1">Pivo</option>
-                    <option value="2">Crno vino</option>
-                    <option value="3">Bijelo vino</option>
-                    <option value="4">Liker</option>
-                    <option value="5">Vodka</option>
-                    <option value="6">Whiskey</option>
-                    <option value="7">Cocktail</option>
+                    <option style="text-align:center" selected disabled value="">--- Odaberite vrstu svog pića ---</option>
+                    <option>Pivo</option>
+                    <option>Crno vino</option>
+                    <option>Bijelo vino</option>
+                    <option>Liker</option>
+                    <option>Vodka</option>
+                    <option>Whiskey</option>
+                    <option>Cocktail</option>
                 </select>
             </div>
         </div>
@@ -73,7 +73,7 @@ export default{
 		return {
 			naziv: "",
 			vrste: "",
-			cijena: "",
+			cijena: 0,
             opis: "",
             slika: ""
 		};

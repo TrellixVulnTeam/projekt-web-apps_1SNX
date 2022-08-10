@@ -15,6 +15,9 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: {
+      reload: true,
+    },
     component: () => import( '../views/Login.vue')
   },
   {

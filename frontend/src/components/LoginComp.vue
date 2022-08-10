@@ -6,6 +6,7 @@
 				<input v-model="email" type="text" placeholder="Email" />
 				<input v-model="lozinka" type="password" placeholder="Lozinka" />
 				<button class="btn btn-default" @click="login()">Prijava</button>
+				<p v-if="falseUser" style="color:red">Korisnik ne postoji!</p>
 			</form>
 		</div>
 	</div>
@@ -23,17 +24,33 @@ export default {
   data(){
 	return {
 		email:"",
-		lozinka:""
+		lozinka:"",
+		falseUser: false,
+		logedIn: false
 	}
   },
   methods: {
 	async login(){
-		let success = await Auth.login(this.email,this.lozinka);
-		console.log('Rezultat prijave', success);
-
-		if (success == true) {
-			this.$router.push({ name: 'Home' })
+		console.log('Usao');
+		try 
+		{
+			this.logedIn = await Auth.login(this.email,this.lozinka);
 		}
+		catch
+		{
+			this.logedIn = false;
+		}
+		console.log('Rezultat prijave', this.logedIn);
+
+		if (this.logedIn == true) {
+			this.$router.push({name:'Home'})
+				.then(() => this.$router.go()
+			);
+		}
+		else {
+			this.falseUser = true;
+		}
+		
 	}
   }
 }

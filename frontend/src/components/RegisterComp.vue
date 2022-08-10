@@ -7,6 +7,7 @@
 				<input v-model="email" type="email" placeholder="Email" />
 				<input v-model="lozinka" type="password" placeholder="Lozinka"/>
 				<button type="submit" class="btn btn-default" @click="Register()">Registracija</button>
+        <p v-if="emptyField" style="color:red">Unesite sva polja!</p>
 			</form>
 		</div>
 	</div>
@@ -24,10 +25,14 @@ export default {
 			ime_prezime: "",
 			email: "",
 			lozinka: "",
+      emptyField: null,
 		};
     },
     methods:{
         async Register(){
+          if(this.ime_prezime!==""&&this.email!==""&&this.lozinka!=="")
+          {
+            this.emptyField=false;
             let data = {
                 Ime_i_prezime:this.ime_prezime,
                 Email:this.email, 
@@ -37,6 +42,10 @@ export default {
                 this.$router.push({ path: '/login' });
             });
         }
+        else{
+          this.emptyField=true;
+        }
+      }
     }
 }
 </script>
