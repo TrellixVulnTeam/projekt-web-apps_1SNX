@@ -83,7 +83,7 @@ let Auth = {
         }
     }
 }
-
+let termin;
 let Products = {
     postProducts(podaci){
         return Service.post('/proizvodi', podaci);
@@ -102,7 +102,7 @@ let Products = {
                     slika: docProduct.slika,
             }      
             });
-            
+            console.log("jel je ovo proxy",data)
             return data;
     },
     async singleProduct(naziv){
@@ -118,7 +118,24 @@ let Products = {
             opis: singleDoc.opis,
             slika: singleDoc.slika,
         };
-    }, 
+    },
+    async searchProducts(termin){
+        let response = await Service.get(`http://localhost:3005/proizvodi?_any=` + termin);
+        let data = response.data;
+        console.log('Dataa',data)
+			data = data.map((docProduct)=>{
+			return {
+					id: docProduct._id,
+					naziv: docProduct.naziv,
+					vrste: docProduct.vrste,
+					cijena: docProduct.cijena,
+					opis: docProduct.opis,
+					slika: docProduct.slika,
+			}
+			});
+			console.log("Novi itemi: ",data)
+			return data;
+},
 }
 
 export { Service, Auth, Products }

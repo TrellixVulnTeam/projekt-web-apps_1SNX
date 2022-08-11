@@ -14,6 +14,8 @@ const port = 3005
 app.use(cors());
 app.use(express.json());
 
+/* --------- Autentifikacija --------- */
+
 app.post('/korisnici', async (req, res) => {
     let UserData = req.body;
 
@@ -52,6 +54,8 @@ app.post('/auth', async (req, res) => {
     }
 });
 
+/* --------- Proizvodi --------- */
+
 app.post ('/proizvodi', async (req , res) => {
     let db = await connect();
     let  proizvodi = req.body;
@@ -72,13 +76,33 @@ app.post ('/proizvodi', async (req , res) => {
     console.log(result);
 });
 
-app.get('/proizvodi', async (req,res) => {
-    let db = await connect()
+app.get('/proizvodi', async (req , res) => {
+    let db = await connect();
+    let query = req.query;
+
+    let selektiraj = {}
     
-    let data = await db.collection("proizvodi").find({})
-    let allProducts = await data.toArray();
+    if(query.naziv){
+        selektiraj.naziv = new RegExp(query.naziv)
+    }
+
+    if(query._any) {
+        let pretraga = query._any;
+        let pojmovi = pretraga.split(' ');
+        selektiraj = {
+            $and: [],
+        };
     
-    res.json(allProducts);
+        pojmovi.forEach((pojam) => {
+            selektiraj.$and.push({naziv: new RegExp(pojam)});
+        });
+    }
+    
+    let cursor = await db.collection('proizvodi').find(selektiraj);
+    let results = await cursor.toArray();
+
+    console.log("Rezultati: ",results)
+    res.json(results)
 });
 
 app.get('/proizvodi/:naziv', async (req , res) => {

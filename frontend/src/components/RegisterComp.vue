@@ -39,13 +39,18 @@ export default {
                 Lozinka:this.lozinka,
             }
             await Auth.SendRegisterData(data).then(() => {
-                this.$router.push({ path: '/login' });
+                this.$router.push({name:'Home'})
+                  .then(() => this.$router.go()
+                )
             });
         }
         else{
           this.emptyField=true;
         }
       }
+    },
+    created(){
+      
     }
 }
 </script>

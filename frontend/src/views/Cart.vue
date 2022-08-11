@@ -9,7 +9,7 @@
 						<tr class="cart_menu">
 							<td class="image">Proizvod</td>
 							<td class="description">Opis</td>
-							<td class="price">Price</td>
+							<td class="price">Cijena</td>
 							<td class="quantity">Količina</td>
 							<td class="total">Ukupno</td>
 							<td></td>

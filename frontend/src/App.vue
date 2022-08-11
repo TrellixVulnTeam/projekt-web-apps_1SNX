@@ -50,9 +50,9 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Traži"/>
-						</div>
+						<!--<div class="search_box pull-right">
+							<input v-model="store.searchTerm" type="text" placeholder="Traži"/>
+						</div>-->
 					</div>
 				</div>
 			</div>
@@ -65,23 +65,30 @@
 <script>
 
 import { Auth } from '@/services';
+import store from '@/store';
 
 export default {
 	data(){
 		return {
 			auth: Auth.state,
 			admin: false,
+			store
 		};
 	},
 	methods:{
 		logout(){
 			Auth.logout();
 			this.$router.go();
-		}
+		},
+		/*async search(){
+			console.log('ulazimmm')
+			let response = await axios.get('http://localhost:3005/proizvodiTrazi?_any='+this.term);
+			console.log('Evo magije: ',response.data[0])
+		}*/
 	},
 	async created(){
-		console.log("aa", Auth.state.userEmail);
-		if(Auth.state.userEmail==="admin@gmail.com"){
+		console.log('Current user: ',Auth.state.userEmail);
+		if(Auth.state.userEmail==='admin@gmail.com'){
 			this.admin=true;
 		}
 		else{

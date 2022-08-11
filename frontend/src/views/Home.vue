@@ -10,7 +10,7 @@
 				<div class="col-sm-3">
 					<div class="left-sidebar">
 						
-					
+						
 						<div class="brands_products"><!--brands_products-->
 							<h2>Vrste pića</h2>
 							<div class="brands-name">
@@ -32,9 +32,9 @@
 				
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
+					<input v-model="searchingTerm" placeholder="Traži..." style="margin-bottom:20px"/>
 						<h2 class="title text-center">Naša ponuda</h2>
-						
-						<div class="col-sm-4" v-for="item in items" :key=item.id>
+						<div class="col-sm-4" v-for="item in newItems" :key="item.id">
 							<div class="product-image-wrapper">
 								<div class="single-products">
 										<div class="productinfo text-center">
@@ -49,6 +49,7 @@
 												<p>{{item.naziv}}</p>
 												<button @click.prevent="RouteName(item)" class="btn btn-default add-to-cart">Detalji</button><br>
 												<router-link to="/cart" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</router-link>
+												
 											</div>
 										</div>
 								</div>
@@ -59,6 +60,7 @@
 								</div>
 							</div>
 						</div>
+						
 					</div>
 					
 				</div>
@@ -75,28 +77,53 @@
 // @ is an alias to /src
 import Footer from '@/components/footer.vue'
 import { Products } from '@/services'
+import store from '@/store'
+import axios from 'axios'
+import AsyncComputed from 'vue-async-computed'
 
 export default {
   name: 'Home',
   components: {
 	Footer
   },
+
   data() {
 		return {
+			store,
+			newItems: [],
 			items: [],
-			//typeCounter
+			searchTerm: store.searchTerm,
+			search: '',
+			searchingTerm:'',
+			//filteredItems:[]
 		};
     },
+	watch: {
+		searchingTerm() {
+			this.fetchProducts();
+		}, 
+		
+	},
+	
 	methods:{
 		RouteName(items){
 			console.log(items.naziv)
             this.$router.push({ path: `/drinks/${items.naziv}` })
             console.log(this.$route.naziv);
         },
+		async fetchProducts(){
+			if(this.newItems==''){
+				this.newItems=this.items;
+			}
+			else{
+				this.newItems = await Products.searchProducts(this.searchingTerm);
+			}
+		}
 	},
 	async created(){
 		this.items = await Products.fetchProducts();
 		console.log(this.items)
+		this.fetchProducts();
 	}
 }
 </script>
