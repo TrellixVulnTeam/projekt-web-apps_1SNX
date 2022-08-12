@@ -90,8 +90,9 @@ let Products = {
     },
     async fetchProducts(){
         
-            let response = await Service.get(`/proizvodi`);
+            let response = await Service.get(`/svi_proizvodi`);
             let data = response.data;
+            console.log("Data prije")
             data=data.map((docProduct)=>{
             return {
                     id: docProduct._id,
@@ -102,7 +103,7 @@ let Products = {
                     slika: docProduct.slika,
             }      
             });
-            console.log("jel je ovo proxy",data)
+            console.log("Data: ",data)
             return data;
     },
     async singleProduct(naziv){
@@ -122,7 +123,6 @@ let Products = {
     async searchProducts(termin){
         let response = await Service.get(`http://localhost:3005/proizvodi?_any=` + termin);
         let data = response.data;
-        console.log('Dataa',data)
 			data = data.map((docProduct)=>{
 			return {
 					id: docProduct._id,
@@ -133,7 +133,6 @@ let Products = {
 					slika: docProduct.slika,
 			}
 			});
-			console.log("Novi itemi: ",data)
 			return data;
 },
 }

@@ -122,7 +122,7 @@ export default {
 	},
 	async created(){
 		this.items = await Products.fetchProducts();
-		console.log(this.items)
+		console.log("Ovi itemi: ",this.items) 
 		this.fetchProducts();
 	}
 }
