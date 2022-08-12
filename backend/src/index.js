@@ -79,14 +79,15 @@ app.post ('/proizvodi', async (req , res) => {
 app.get('/proizvodi', async (req , res) => {
     let db = await connect();
     let query = req.query;
-
     let selektiraj = {}
     
     if(query.naziv){
         selektiraj.naziv = new RegExp(query.naziv)
+        console.log(query.naziv)
     }
 
     if(query._any) {
+        
         let pretraga = query._any;
         let pojmovi = pretraga.split(' ');
         selektiraj = {
@@ -95,15 +96,29 @@ app.get('/proizvodi', async (req , res) => {
     
         pojmovi.forEach((pojam) => {
             selektiraj.$and.push({naziv: new RegExp(pojam)});
+            console.log("Evo pojma iz baze: ",pojmovi, pojam, new RegExp(pojam))
         });
     }
-    
-    let cursor = await db.collection('proizvodi').find(selektiraj);
+
+    let pojam = query._any
+    console.log(typeof(query._any),query._any)
+    let cursor = await db.collection('proizvodi').find({naziv:{$regex: `${pojam}` ,$options: "i"}},selektiraj);
     let results = await cursor.toArray();
 
-    console.log("Rezultati: ",results)
     res.json(results)
+    
+   
 });
+
+app.get('/svi_proizvodi', async (req , res) => {
+    let db = await connect();
+    let cursor = await db.collection("proizvodi").find({})
+    let products = await cursor.toArray();
+
+    console.log(products)
+    res.json(products)
+});
+
 
 app.get('/proizvodi/:naziv', async (req , res) => {
     let nazivProizvoda = req.params.naziv;
@@ -113,5 +128,7 @@ app.get('/proizvodi/:naziv', async (req , res) => {
     console.log(singleDoc)
     res.json(singleDoc)
 });
+
+
    
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))
