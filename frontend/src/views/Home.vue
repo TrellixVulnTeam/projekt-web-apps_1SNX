@@ -15,12 +15,7 @@
 							<h2>Vrste pića</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<li><a href="#"> <span class="pull-right">(1)</span>Pivo</a></li>
-									<li><a href="#"> <span class="pull-right">(1)</span>Bijelo vino</a></li>
-									<li><a href="#"> <span class="pull-right">(1)</span>Vodka</a></li>
-									<li><a href="#"> <span class="pull-right">(1)</span>Liker</a></li>
-									<li><a href="#"> <span class="pull-right">(1)</span>Whiskey</a></li>
-									<li><a href="#"> <span class="pull-right">(1)</span>Cocktail</a></li>
+									<li v-for="item in items" :key="item.id"><a @click="categoryFilter(item.vrste)" href="#"><span class="pull-right">()</span>{{item.vrste}}</a></li>
 								</ul>
 							</div>
 						</div>
@@ -34,7 +29,7 @@
 					<div class="features_items"><!--features_items-->
 					<input v-model="searchingTerm" placeholder="Traži..." style="margin-bottom:20px"/>
 						<h2 class="title text-center">Naša ponuda</h2>
-						<div class="col-sm-4" v-for="item in newItems" :key="item.id">
+						<div class="col-sm-4" v-for="item in filteredItems" :key="item.id">
 							<div class="product-image-wrapper">
 								<div class="single-products">
 										<div class="productinfo text-center">
@@ -95,13 +90,14 @@ export default {
 			searchTerm: store.searchTerm,
 			search: '',
 			searchingTerm:'',
-			//filteredItems:[]
+			filteredItems:[],
 		};
     },
 	watch: {
 		searchingTerm() {
 			this.fetchProducts();
 		}, 
+		
 		
 	},
 	
@@ -112,17 +108,21 @@ export default {
             console.log(this.$route.naziv);
         },
 		async fetchProducts(){
-			if(this.newItems==''){
-				this.newItems=this.items;
-			}
-			else{
-				this.newItems = await Products.searchProducts(this.searchingTerm);
-			}
+			this.filteredItems=this.items;
+			console.log("fetch products: ",this.filteredItems)
+			
+			this.filteredItems = await Products.searchProducts(this.searchingTerm);
+		},
+		async categoryFilter(product){
+
+			this.filteredItems = await Products.productCategory(product)
+			console.log(this.filteredItems.length)
+			return this.filteredItems;
 		}
 	},
 	async created(){
 		this.items = await Products.fetchProducts();
-		console.log("Ovi itemi: ",this.items) 
+		console.log("Items: ",this.items) 
 		this.fetchProducts();
 	}
 }

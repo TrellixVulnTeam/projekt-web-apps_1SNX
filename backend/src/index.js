@@ -96,7 +96,6 @@ app.get('/proizvodi', async (req , res) => {
     
         pojmovi.forEach((pojam) => {
             selektiraj.$and.push({naziv: new RegExp(pojam)});
-            console.log("Evo pojma iz baze: ",pojmovi, pojam, new RegExp(pojam))
         });
     }
 
@@ -129,6 +128,17 @@ app.get('/proizvodi/:naziv', async (req , res) => {
     res.json(singleDoc)
 });
 
+app.get('/proizvodi/kategorija/:vrste', async (req , res) => {
+    let vrsteProizvoda = req.params.vrste;
+    let db = await connect();
+
+    console.log("Vrste: ",vrsteProizvoda)
+    let singleDoc = await db.collection("proizvodi").find({vrste: vrsteProizvoda})
+    let results = await singleDoc.toArray();
+    
+   
+    res.json(results)
+});
 
    
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))

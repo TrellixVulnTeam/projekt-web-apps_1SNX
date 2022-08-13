@@ -83,7 +83,6 @@ let Auth = {
         }
     }
 }
-let termin;
 let Products = {
     postProducts(podaci){
         return Service.post('/proizvodi', podaci);
@@ -121,7 +120,7 @@ let Products = {
         };
     },
     async searchProducts(termin){
-        let response = await Service.get(`http://localhost:3005/proizvodi?_any=` + termin);
+        let response = await Service.get(`/proizvodi?_any=` + termin);
         let data = response.data;
 			data = data.map((docProduct)=>{
 			return {
@@ -134,7 +133,23 @@ let Products = {
 			}
 			});
 			return data;
-},
+    },
+    async productCategory(imeKategorije){
+
+        let response = await Service.get(`/proizvodi/kategorija/${imeKategorije}`);
+        let doc = response.data;
+        doc = doc.map((doc)=>{
+        console.log(doc);
+        return {
+            naziv: doc.naziv,
+            vrste: doc.vrste,
+            cijena: doc.cijena,
+            opis: doc.opis,
+            slika: doc.slika,
+        }
+        });
+        return doc;
+    },
 }
 
 export { Service, Auth, Products }
