@@ -15,7 +15,7 @@
 							<h2>Vrste pića</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<li v-for="item in items" :key="item.id"><a @click="categoryFilter(item.vrste)" href="#"><span class="pull-right">()</span>{{item.vrste}}</a></li>
+									<li v-for="item in removeDuplicates" :key="item.vrste"><a @click="categoryFilter(item.vrste)" href="#"><span class="pull-right" style="color: grey;">({{item.counter}})</span>{{item.vrste}}</a></li><li><a @click="fetchProducts()" href="#"><span style="color: grey" class="pull-right">({{categorySum}})</span>SVA PIĆA</a></li>
 								</ul>
 							</div>
 						</div>
@@ -73,6 +73,7 @@
 import Footer from '@/components/footer.vue'
 import { Products } from '@/services'
 import store from '@/store'
+import category from '@/category'
 import axios from 'axios'
 import AsyncComputed from 'vue-async-computed'
 
@@ -85,12 +86,15 @@ export default {
   data() {
 		return {
 			store,
+			category,
 			newItems: [],
 			items: [],
 			searchTerm: store.searchTerm,
 			search: '',
 			searchingTerm:'',
 			filteredItems:[],
+			removeDuplicates:[],
+			categorySum:0,
 		};
     },
 	watch: {
@@ -100,7 +104,6 @@ export default {
 		
 		
 	},
-	
 	methods:{
 		RouteName(items){
 			console.log(items.naziv)
@@ -118,12 +121,73 @@ export default {
 			this.filteredItems = await Products.productCategory(product)
 			console.log(this.filteredItems.length)
 			return this.filteredItems;
-		}
+		},
+		isDuplicate(){
+			let categories = {
+				counterPivo:0,
+				counterCrnoVino:0,
+				counterBijeloVino:0,
+				counterLiker:0,
+				counterVodka:0,
+				counterWhiskey:0,
+				counterCocktail:0,
+			}
+
+			this.items.forEach(item=>{
+			if(item.vrste == 'Pivo'){
+				categories.counterPivo++
+				item.counter = categories.counterPivo;
+				this.categorySum = this.categorySum + 1;
+			}
+			else if(item.vrste == 'Vodka'){
+				categories.counterVodka++
+				item.counter =  categories.counterVodka;
+				this.categorySum = this.categorySum + 1;
+			}
+			else if(item.vrste == 'Bijelo vino'){
+				categories.counterBijeloVino++
+				item.counter =  categories.counterBijeloVino;
+				this.categorySum = this.categorySum + 1;
+			}
+			else if(item.vrste == 'Whiskey'){
+				categories.counterWhiskey++
+				item.counter = categories.counterWhiskey;
+				this.categorySum = this.categorySum + 1;
+			}
+			else if(item.vrste == 'Crno vino'){
+				categories.counterCrnoVino++
+				item.counter = categories.counterCrnoVino;
+				this.categorySum = this.categorySum + 1;
+			}
+			else if(item.vrste == 'Liker'){
+				categories.counterLiker++
+				item.counter = categories.counterLiker;
+				this.categorySum = this.categorySum + 1;
+			}
+			else if(item.vrste == 'Cocktail'){
+				categories.counterCocktail++
+				item.counter = categories.counterCocktail;
+				this.categorySum = this.categorySum + 1;
+			}
+			})
+
+			let products = this.items;
+			function getUniqueListBy(products, key) {
+			return [...new Map(products.map(item => [item[key], item])).values()]
+			}
+			this.removeDuplicates = getUniqueListBy(products, 'vrste')
+			
+			console.log("Kategorije bez duplikata: ",this.removeDuplicates)
+		},
 	},
 	async created(){
 		this.items = await Products.fetchProducts();
 		console.log("Items: ",this.items) 
+		
 		this.fetchProducts();
+		
+		this.isDuplicate();
+		
 	}
 }
 </script>
