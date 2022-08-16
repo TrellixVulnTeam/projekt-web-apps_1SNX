@@ -6,11 +6,15 @@ import connect from './db.js';
 import cors from 'cors';
 import mongo from 'mongodb';
 import auth from './auth';
+let Cart = require ('./cartLogic');
+let session = require("express-session");
 
 const app = express() 
 const port = 3005 
 //const db = connect()
-
+app.use(session({
+    secret: "secretSession"
+  }));
 app.use(cors());
 app.use(express.json());
 
@@ -140,5 +144,30 @@ app.get('/proizvodi/kategorija/:vrste', async (req , res) => {
     res.json(results)
 });
 
-   
+/* --------- Košarica --------- */
+
+app.post("/dodaj_u_kosaricu/:naziv", async (req, res) => {
+
+    let db = await connect();
+    let cursor = await db.collection("proizvodi").find({})
+    let finalData = await cursor.toArray();
+    const naziv = req.params.naziv;
+
+    const jednoPice = await finalData.find((proizvod) => proizvod.naziv === naziv);
+    let cart;
+    if (!req.session.cart) req.session.cart = cart = new Cart({});
+
+    else cart = new Cart(req.session.cart);
+
+    req.session.cart = cart;
+    cart.dodajPice(jednoPice);
+    console.log(req.session.cart)
+    res.send(cart);
+});  
+app.get("/dohvati_kosaricu",async (req, res) => {
+    let trenutnaKosarica = req.session;
+    console.log(req.session)
+    res.json(trenutnaKosarica);
+});
+    
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))
