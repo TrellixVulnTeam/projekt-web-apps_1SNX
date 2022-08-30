@@ -7,41 +7,32 @@
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
-							<td class="image">Proizvod</td>
-							<td class="description">Opis</td>
-							<td class="price">Cijena</td>
-							<td class="quantity">Količina</td>
-							<td class="total">Ukupno</td>
+							<td class="image"></td>
+							<td class="price">Količina</td>
+							<td class="quantity">Cijena</td>
+							<td class="total">Briši stanje košarice</td>
 							<td></td>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td class="cart_product">
-								<div ><a href=""><img class="img_cart" src="@/assets/images/jack_daniels.jpg" alt=""></a></div>
-							</td>
+						<tr style="margin-top:20px">
 							<td class="cart_description">
-								<h4><a href="">Jack Daniels honey</a></h4>
-							</td>
-							<td class="cart_price">
-								<p>169,99 kn</p>
+								<h4><a href="">Vaša košarica: </a></h4>
 							</td>
 							<td class="cart_quantity">
 								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
+									{{cartQty}}
 								</div>
 							</td>
 							<td class="cart_total">
-								<p class="cart_total_price">169,99 kn</p>
+								<p class="cart_total_price">{{cartPrice}} kn</p>
 							</td>
 							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+								<a style="margin-left:50px" class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
 
-						<tr>
+						<!--<tr>
 							<td class="cart_product">
 								<div ><a href=""><img class="img_cart" src="@/assets/images/grasevina.jpg" alt=""></a></div>
 							</td>
@@ -88,7 +79,7 @@
 							<td class="cart_delete">
 								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
 							</td>
-						</tr>
+						</tr>-->
 					</tbody>
 				</table>
 			</div>
@@ -134,12 +125,12 @@
 				<div class="col-sm-6">
 					<div class="total_area">
 						<ul>
-							<li>Ukupna potrošnja iz košarice<span>332,99 kn</span></li>
-							<li>Porez <span>9,99 kn</span></li>
+							<li>Ukupna potrošnja iz košarice<span>{{cartPrice}} kn</span></li>
+							<li>Porez <span>{{cartTax.toFixed(2)}} kn</span></li>
 							<li>Dostava <span>Besplatno</span></li>
-							<li>Ukupno<span>332,99 kn</span></li>
+							<li>Ukupno<span>{{cartPrice}} kn</span></li>
 						</ul>
-							<a class="btn btn-default check_out" href="">Kupi</a>
+							<a class="btn btn-default check_out" @click="confirmData()" href="">Kupi</a>
 					</div>
 				</div>
 			</div>
@@ -153,11 +144,42 @@
 <script>
 // @ is an alias to /src
 import Footer from '@/components/footer.vue'
+import {Cart} from '@/services'
 
 export default {
   name: 'Home',
   components: {
 	Footer
+  },
+  data(){
+	return {
+		cartItems: [],
+		cartPrice: 0,
+		cartQty: 0,
+		cartTax: 0
+	}
+  },
+  methods:{
+	async cartData(){
+			let dohvat = await Cart.fetchCart();
+			this.cartItems = JSON.parse(JSON.stringify(dohvat.cart));
+			this.cartPrice = this.cartItems.ukupnaCijena.toFixed(2);
+			this.cartQty = this.cartItems.ukupnaKol;
+			this.cartTax = this.cartPrice*0.05;
+		},
+	async confirmData(){
+		/*let placanje = {
+                cijena: this.cartPrice,
+                količinaProizvoda:this.cartQty,
+                cijena: this.cijena,
+                opis: this.opis,
+                slika: this.slika,
+            }*/
+	}
+  },
+  created(){
+		this.cartData()
   }
 }
 </script>
+

@@ -36,14 +36,14 @@
 											<img :src="item.slika" alt="" />
 											<h2>{{item.cijena}} kn</h2>
 											<p>{{item.naziv}}</p>
-											<router-link to="/cart" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</router-link>
+											<router-link to="" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</router-link>
 										</div>
 										<div class="product-overlay">
 											<div class="overlay-content">
 												<h2>{{item.cijena}} kn</h2>
 												<p>{{item.naziv}}</p>
 												<button @click.prevent="RouteName(item)" class="btn btn-default add-to-cart">Detalji</button><br>
-												<router-link to="/cart" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</router-link>
+												<p @click="sendCartData(item.naziv);" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</p>
 												
 											</div>
 										</div>
@@ -71,7 +71,7 @@
 <script>
 // @ is an alias to /src
 import Footer from '@/components/footer.vue'
-import { Products } from '@/services'
+import { Products, Cart } from '@/services'
 import store from '@/store'
 import category from '@/category'
 import axios from 'axios'
@@ -179,6 +179,10 @@ export default {
 			
 			console.log("Kategorije bez duplikata: ",this.removeDuplicates)
 		},
+		async sendCartData(naziv){
+			Cart.addToCart(naziv);
+		},
+		
 	},
 	async created(){
 		this.items = await Products.fetchProducts();

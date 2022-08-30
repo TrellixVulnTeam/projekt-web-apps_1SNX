@@ -1,35 +1,12 @@
 import axios from 'axios';
 import $router from '@/router';
 
+//axios.defaults.withCredentials = true
 
-let Service = axios.create({     
-    baseURL: 'http://localhost:3005/',  
-    timeout: 1000,
+let Service = axios.create({ 
+    baseURL: 'http://localhost:3006/',  
 });
 
-/*
-Service.interceptors.request.use((request) => {
-
-    let token = Auth.getToken()
-
-    if (!token) {
-        $router.go();
-        return;
-    }
-    else{
-        request.headers['Authorization'] = 'Bearer ' + token;
-        return request;
-    }
-});
-
-Service.interceptors.use((response) => response, (error) => {
-    if (error.response.status == 401 || error.response.status == 403){
-        Auth.logout();
-        $router.go();
-    }
-});
-
-*/
 
 let Auth = {
     async SendRegisterData(ime_prezime, email, lozinka) {
@@ -152,4 +129,17 @@ let Products = {
     },
 }
 
-export { Service, Auth, Products }
+let Cart = {
+    addToCart(naziv){
+        return Service.post(`/dodaj_u_kosaricu/${naziv}`)
+    },
+    async fetchCart(){
+        let response = await Service.get(`/dohvati_kosaricu`);
+        let cart = response.data;
+        console.log("cartt",cart)
+        console.log("Evo cart: ",cart);
+        return cart;
+    }
+}
+
+export { Service, Auth, Products, Cart }
