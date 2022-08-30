@@ -6,17 +6,21 @@ import connect from './db.js';
 import cors from 'cors';
 import mongo from 'mongodb';
 import auth from './auth';
+import jwt from 'jsonwebtoken';
 let Cart = require ('./cartLogic');
-let session = require("express-session");
+//const MemoryStore = require('memorystore')(session)
 
 const app = express() 
-const port = 3005 
-//const db = connect()
-app.use(session({
-    secret: "secretSession"
-  }));
-app.use(cors());
+const port = 3006 
 app.use(express.json());
+
+  var corsOptions = {
+    credentials: true
+  }
+app.use(cors((corsOptions)));
+
+app.set("trust proxy", 1)
+
 
 /* --------- Autentifikacija --------- */
 
@@ -102,7 +106,7 @@ app.get('/proizvodi', async (req , res) => {
             selektiraj.$and.push({naziv: new RegExp(pojam)});
         });
     }
-
+    
     let pojam = query._any
     console.log(typeof(query._any),query._any)
     let cursor = await db.collection('proizvodi').find({naziv:{$regex: `${pojam}` ,$options: "i"}},selektiraj);
@@ -151,22 +155,23 @@ app.post("/dodaj_u_kosaricu/:naziv", async (req, res) => {
     let db = await connect();
     let cursor = await db.collection("proizvodi").find({})
     let finalData = await cursor.toArray();
+
     const naziv = req.params.naziv;
 
     const jednoPice = await finalData.find((proizvod) => proizvod.naziv === naziv);
-    let cart;
-    if (!req.session.cart) req.session.cart = cart = new Cart({});
-
-    else cart = new Cart(req.session.cart);
-
-    req.session.cart = cart;
+    
+    const cart = new Cart(jwt.cart ?? {}); 
+    
     cart.dodajPice(jednoPice);
-    console.log(req.session.cart)
+    jwt.cart = JSON.parse(JSON.stringify(cart));
+    //console.log(cart);
+
+
     res.send(cart);
 });  
 app.get("/dohvati_kosaricu",async (req, res) => {
-    let trenutnaKosarica = req.session;
-    console.log(req.session)
+    let trenutnaKosarica = jwt;
+    console.log(trenutnaKosarica.cart)
     res.json(trenutnaKosarica);
 });
     

@@ -12,23 +12,11 @@ module.exports = function Cart(prijasnjaKosarica) {
         this.ukupnaCijena = parseFloat(proizvod.cijena);
   
       } else {
-  
-        spremiProizvod = {proizvod: proizvod};
-        this.proizvodi = spremiProizvod;
-        Object.defineProperties(spremiProizvod, {
-            kolicinaTrenutnogPr: {
-                enumerable: false,
-                writable: true
-            },
-            cijena: {
-                enumerable: false,
-                writable: true
-            }
-        },
         
-        );
-        spremiProizvod.kolicinaTrenutnogPr++;
-        spremiProizvod.cijena = parseFloat(spremiProizvod.proizvod.cijena * spremiProizvod.kolicinaTrenutnogPr);
+          spremiProizvod = {proizvod: proizvod};
+          this.proizvodi = spremiProizvod;
+          spremiProizvod.cijena = parseFloat(spremiProizvod.proizvod.cijena * spremiProizvod.kolicinaTrenutnogPr);
+      
         this.ukupnaKol++;
         this.ukupnaCijena += parseFloat(spremiProizvod.proizvod.cijena);
       }
