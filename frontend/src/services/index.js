@@ -141,5 +141,10 @@ let Cart = {
         return cart;
     }
 }
+let Payment = {
+    pay(podaci){
+        return Service.post('/placanje', podaci);
+    }
+}
 
-export { Service, Auth, Products, Cart }
+export { Service, Auth, Products, Cart, Payment }

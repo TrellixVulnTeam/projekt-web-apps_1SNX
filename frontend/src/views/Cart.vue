@@ -31,55 +31,6 @@
 								<a style="margin-left:50px" class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
-
-						<!--<tr>
-							<td class="cart_product">
-								<div ><a href=""><img class="img_cart" src="@/assets/images/grasevina.jpg" alt=""></a></div>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Vino Graševina</a></h4>
-							</td>
-							<td class="cart_price">
-								<p>149,99 kn</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">149,99 kn</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>
-						<tr>
-							<td class="cart_product">
-								<div ><a href=""><img class="img_cart" src="@/assets/images/corona.jpg" alt=""></a></div>
-							</td>
-							<td class="cart_description">
-								<h4><a href="">Pivo Corona</a></h4>
-							</td>
-							<td class="cart_price">
-								<p>12,99 kn</p>
-							</td>
-							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
-									<input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
-								</div>
-							</td>
-							<td class="cart_total">
-								<p class="cart_total_price">12,99 kn</p>
-							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
-						</tr>-->
 					</tbody>
 				</table>
 			</div>
@@ -98,7 +49,7 @@
 						<ul class="user_info">
 							<li class="single_field">
 								<label>Država:</label>
-								<select>
+								<select v-model="drzava">
 									<option>Hrvatska</option>
 									<option>Bosna i Hercegovina</option>
 									<option>Srbija</option>
@@ -112,12 +63,12 @@
 							</li>
 							<li class="single_field zip-field">
 								<label>Grad:</label>
-								<input type="text">
+								<input v-model="grad" type="text">
 							
 							</li>
 							<li class="single_field zip-field">
 								<label>Poštanski broj:</label>
-								<input type="text">
+								<input v-model="postanski_broj" type="text">
 							</li>
 						</ul>
 					</div>
@@ -130,7 +81,7 @@
 							<li>Dostava <span>Besplatno</span></li>
 							<li>Ukupno<span>{{cartPrice}} kn</span></li>
 						</ul>
-							<a class="btn btn-default check_out" @click="confirmData()" href="">Kupi</a>
+							<a class="btn btn-default check_out" @click="confirmData()">Kupi</a>
 					</div>
 				</div>
 			</div>
@@ -144,7 +95,7 @@
 <script>
 // @ is an alias to /src
 import Footer from '@/components/footer.vue'
-import {Cart} from '@/services'
+import { Cart, Auth, Payment } from '@/services'
 
 export default {
   name: 'Home',
@@ -153,10 +104,14 @@ export default {
   },
   data(){
 	return {
+		auth: Auth.state,
 		cartItems: [],
 		cartPrice: 0,
 		cartQty: 0,
-		cartTax: 0
+		cartTax: 0,
+		drzava: "",
+		grad:"",
+		postanski_broj:""
 	}
   },
   methods:{
@@ -168,13 +123,16 @@ export default {
 			this.cartTax = this.cartPrice*0.05;
 		},
 	async confirmData(){
-		/*let placanje = {
+		let placanje = {
                 cijena: this.cartPrice,
-                količinaProizvoda:this.cartQty,
-                cijena: this.cijena,
-                opis: this.opis,
-                slika: this.slika,
-            }*/
+                kolicinaProizvoda:this.cartQty,
+				drzava: this.drzava,
+				grad: this.grad,
+				postanski_broj: this.postanski_broj,
+				korisnik: this.auth.userEmail
+            }
+		Payment.pay(placanje);
+		
 	}
   },
   created(){

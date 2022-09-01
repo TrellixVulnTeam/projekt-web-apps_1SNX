@@ -174,5 +174,26 @@ app.get("/dohvati_kosaricu",async (req, res) => {
     console.log(trenutnaKosarica.cart)
     res.json(trenutnaKosarica);
 });
+
+/* --------- Plaćanje --------- */
+
+app.post("/placanje",async (req, res) => {
+    let db = await connect();
+    let payment = req.body;
+
+    let result = await db.collection('placanje').insertOne(payment);
+    if (result.insertedCount == 1) {
+        res.send({
+            status: 'success',
+            id: result.insertedId,
+        });
+    } 
+    else {
+        res.send({
+            status: 'fail',
+        });
+    }
     
+});
+
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))
