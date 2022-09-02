@@ -12,7 +12,6 @@ module.exports = function Cart(prijasnjaKosarica) {
         this.ukupnaCijena = parseFloat(proizvod.cijena);
   
       } else {
-        
           spremiProizvod = {proizvod: proizvod};
           this.proizvodi = spremiProizvod;
           spremiProizvod.cijena = parseFloat(spremiProizvod.proizvod.cijena * spremiProizvod.kolicinaTrenutnogPr);

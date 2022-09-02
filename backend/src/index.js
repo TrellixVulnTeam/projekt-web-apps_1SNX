@@ -119,7 +119,7 @@ app.get('/proizvodi', async (req , res) => {
 
 app.get('/svi_proizvodi', async (req , res) => {
     let db = await connect();
-    let cursor = await db.collection("proizvodi").find({})
+    let cursor = await db.collection('proizvodi').find({})
     let products = await cursor.toArray();
 
     console.log(products)
@@ -130,7 +130,7 @@ app.get('/svi_proizvodi', async (req , res) => {
 app.get('/proizvodi/:naziv', async (req , res) => {
     let nazivProizvoda = req.params.naziv;
     let db = await connect();
-    let singleDoc = await db.collection("proizvodi").findOne({naziv: nazivProizvoda})
+    let singleDoc = await db.collection('proizvodi').findOne({naziv: nazivProizvoda})
 
     console.log(singleDoc)
     res.json(singleDoc)
@@ -141,13 +141,29 @@ app.get('/proizvodi/kategorija/:vrste', async (req , res) => {
     let db = await connect();
 
     console.log("Vrste: ",vrsteProizvoda)
-    let singleDoc = await db.collection("proizvodi").find({vrste: vrsteProizvoda})
+    let singleDoc = await db.collection('proizvodi').find({vrste: vrsteProizvoda})
     let results = await singleDoc.toArray();
     
    
     res.json(results)
 });
 
+app.get('/proizvodi/brisi/:naziv', async (req , res) => {
+    let nazivProizvoda = req.params.naziv;
+    let db = await connect();
+
+    let result = await db.collection('proizvodi').deleteOne({ naziv: nazivProizvoda });
+
+	if (result && result.deletedCount == 1) {
+		res.json(result);
+	} else {
+		res.json({
+			status: "fail",
+		});
+	}
+   
+    res.json(result)
+});
 /* --------- Košarica --------- */
 
 app.post("/dodaj_u_kosaricu/:naziv", async (req, res) => {
@@ -169,6 +185,7 @@ app.post("/dodaj_u_kosaricu/:naziv", async (req, res) => {
 
     res.send(cart);
 });  
+
 app.get("/dohvati_kosaricu",async (req, res) => {
     let trenutnaKosarica = jwt;
     console.log(trenutnaKosarica.cart)
@@ -195,5 +212,6 @@ app.post("/placanje",async (req, res) => {
     }
     
 });
+
 
 app.listen(port, () => console.log(`Slušam na portu ${port}!`))
