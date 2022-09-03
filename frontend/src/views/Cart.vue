@@ -10,7 +10,7 @@
 							<td class="image"></td>
 							<td class="price">Količina</td>
 							<td class="quantity">Cijena</td>
-							<td class="total">Briši stanje košarice</td>
+							<!--<td class="total">Briši stanje košarice</td>-->
 							<td></td>
 						</tr>
 					</thead>
@@ -27,9 +27,9 @@
 							<td class="cart_total">
 								<p class="cart_total_price">{{cartPrice}} kn</p>
 							</td>
-							<td class="cart_delete">
+							<!--<td class="cart_delete">
 								<a style="margin-left:50px" class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-							</td>
+							</td>-->
 						</tr>
 					</tbody>
 				</table>
@@ -82,6 +82,7 @@
 							<li>Ukupno<span>{{cartPrice}} kn</span></li>
 						</ul>
 							<a class="btn btn-default check_out" @click="confirmData()">Kupi</a>
+							<p v-if="warnMessage" style="color:red">Ispunite sve podatke!</p>
 					</div>
 				</div>
 			</div>
@@ -111,7 +112,8 @@ export default {
 		cartTax: 0,
 		drzava: "",
 		grad:"",
-		postanski_broj:""
+		postanski_broj:"",
+		warnMessage:false
 	}
   },
   methods:{
@@ -123,6 +125,7 @@ export default {
 			this.cartTax = this.cartPrice*0.05;
 		},
 	async confirmData(){
+		if(this.cartPrice !=="" && this.cartQty !=="" && this.drzava !=="" && this.grad !=="" && this.postanski_broj !=="" && this.auth.userEmail !==""){
 		let placanje = {
                 cijena: this.cartPrice,
                 kolicinaProizvoda:this.cartQty,
@@ -132,7 +135,10 @@ export default {
 				korisnik: this.auth.userEmail
             }
 		Payment.pay(placanje);
-		
+		}
+		else{
+			this.warnMessage=true;
+		}
 	}
   },
   created(){

@@ -43,8 +43,9 @@
 												<h2>{{item.cijena}} kn</h2>
 												<p>{{item.naziv}}</p>
 												<button @click.prevent="RouteName(item)" class="btn btn-default add-to-cart">Detalji</button><br>
-												<p @click="sendCartData(item.naziv);" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</p>
-												
+												<a href=""><p @click="sendCartData(item.naziv);" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Dodaj u košaricu</p></a>
+												<br>
+												<button style="background-color:red;border:none" @click="removeProduct(item.naziv)">Briši proizvod</button>
 											</div>
 										</div>
 								</div>
@@ -179,10 +180,13 @@ export default {
 			
 			console.log("Kategorije bez duplikata: ",this.removeDuplicates)
 		},
+		async removeProduct(naziv){
+			Products.deleteProduct(naziv);
+			this.$router.go();
+		},
 		async sendCartData(naziv){
 			Cart.addToCart(naziv);
 		},
-		
 	},
 	async created(){
 		this.items = await Products.fetchProducts();

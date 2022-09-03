@@ -17,7 +17,7 @@
 							<ul class="nav navbar-nav nav-color">
 								<!--<li><router-link to="#"><i class="fa fa-user"></i> Profil</router-link></li>-->
 								<li><router-link to="/"><i class="fa fa-star"></i> Lista želja</router-link></li>
-								<li><router-link to="/cart"><i class="fa fa-shopping-cart"></i> Košarica</router-link></li>
+								<li><router-link to="/cart">{{itemQty}}<i class="fa fa-shopping-cart"></i> Košarica</router-link></li>
 								<li v-if="!auth.authenticated"><router-link to="/login"><i class="fa fa-lock"></i> Prijava</router-link></li>
 								<li v-if="auth.authenticated" class="username"><i class="fa fa-user"></i><p style="display:inline;margin-left:5px"> {{auth.userEmail}}</p></li>
 								<li v-if="auth.authenticated" @click="logout()"><router-link to=""><i class="fa fa-sign-out"></i> Odjava</router-link></li>
@@ -64,7 +64,7 @@
 
 <script>
 
-import { Auth } from '@/services';
+import { Auth, Cart } from '@/services';
 import store from '@/store';
 
 export default {
@@ -72,7 +72,8 @@ export default {
 		return {
 			auth: Auth.state,
 			admin: false,
-			store
+			store,
+			itemQty: 0,
 		};
 	},
 	methods:{
@@ -80,15 +81,15 @@ export default {
 			Auth.logout();
 			this.$router.go();
 		},
-		/*async search(){
-			console.log('ulazimmm')
-			let response = await axios.get('http://localhost:3005/proizvodiTrazi?_any='+this.term);
-			console.log('Evo magije: ',response.data[0])
-		}*/
+		async fetchQty(){
+			let cartData = await Cart.fetchCart();
+			this.itemQty = cartData.cart.ukupnaKol;
+		}
 	},
 	async created(){
+		this.fetchQty();
 		console.log('Current user: ',Auth.state.userEmail);
-		if(Auth.state.userEmail==='admin@gmail.com'){
+		if(Auth.state.userEmail==='aa122@gmail.com'){
 			this.admin=true;
 		}
 		else{
@@ -103,7 +104,6 @@ export default {
 
 @import './assets/styles/bootstrap.min.css';
 @import './assets/styles/font-awesome.min.css';
-/*@import './assets/styles/prettyPhoto.css';*/
 @import './assets/styles/price-range.css';
 @import './assets/styles/animate.css';
 @import './assets/styles/main.css';

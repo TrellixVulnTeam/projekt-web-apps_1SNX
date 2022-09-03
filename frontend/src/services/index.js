@@ -127,6 +127,11 @@ let Products = {
         });
         return doc;
     },
+    async deleteProduct(imeProizvoda){
+        let response = await Service.get(`/proizvodi/brisi/${imeProizvoda}`);
+        let data = response.data;
+        return data;
+    }
 }
 
 let Cart = {
@@ -139,7 +144,7 @@ let Cart = {
         console.log("cartt",cart)
         console.log("Evo cart: ",cart);
         return cart;
-    }
+    },
 }
 let Payment = {
     pay(podaci){
