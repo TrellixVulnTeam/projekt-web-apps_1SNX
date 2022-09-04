@@ -49,11 +49,6 @@
 											</div>
 										</div>
 								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Dodaj u omiljene</a></li>
-									</ul>
-								</div>
 							</div>
 						</div>
 						

@@ -14,7 +14,7 @@
                         </div>
                         <p class="lead">{{singleItem.opis}}</p>
                         <div class="d-flex">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            <button @click="sendCartData(singleItem.naziv)" class="btn btn-outline-dark flex-shrink-0" type="button">
                                 <i class="fa fa-shopping-cart"></i>
                                 Dodaj u košaricu
                             </button>
@@ -28,6 +28,7 @@
 
 
 <script>
+import { Cart } from '@/services'
 export default {
   name: "SingleDrink",
   props: {
@@ -36,6 +37,12 @@ export default {
       required: true,
     },
   },
+  methods: {
+    async sendCartData(naziv){
+			Cart.addToCart(naziv);
+      this.$router.go();
+		},
+  }
 };
 </script>
 <style scoped>

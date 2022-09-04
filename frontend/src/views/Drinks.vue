@@ -29,10 +29,10 @@ export default {
     }
   },
   async created(){
-
+    
     this.drink = await Products.singleProduct(this.name); 
     console.log("Single drink: ",this.drink);
 
-  }
+  },
 };
 </script>

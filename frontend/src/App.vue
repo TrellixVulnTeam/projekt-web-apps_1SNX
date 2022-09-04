@@ -15,8 +15,6 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav nav-color">
-								<!--<li><router-link to="#"><i class="fa fa-user"></i> Profil</router-link></li>-->
-								<li><router-link to="/"><i class="fa fa-star"></i> Lista želja</router-link></li>
 								<li><router-link to="/cart">{{itemQty}}<i class="fa fa-shopping-cart"></i> Košarica</router-link></li>
 								<li v-if="!auth.authenticated"><router-link to="/login"><i class="fa fa-lock"></i> Prijava</router-link></li>
 								<li v-if="auth.authenticated" class="username"><i class="fa fa-user"></i><p style="display:inline;margin-left:5px"> {{auth.userEmail}}</p></li>
@@ -89,7 +87,7 @@ export default {
 	async created(){
 		this.fetchQty();
 		console.log('Current user: ',Auth.state.userEmail);
-		if(Auth.state.userEmail==='aa122@gmail.com'){
+		if(Auth.state.userEmail==='aa@gmail.com'){
 			this.admin=true;
 		}
 		else{

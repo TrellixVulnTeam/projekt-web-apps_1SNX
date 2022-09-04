@@ -8,10 +8,9 @@ import mongo from 'mongodb';
 import auth from './auth';
 import jwt from 'jsonwebtoken';
 let Cart = require ('./cartLogic');
-//const MemoryStore = require('memorystore')(session)
 
 const app = express() 
-const port = 3006 
+const port = 3007 
 app.use(express.json());
 
   var corsOptions = {
