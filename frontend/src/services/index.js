@@ -4,7 +4,7 @@ import $router from '@/router';
 //axios.defaults.withCredentials = true
 
 let Service = axios.create({ 
-    baseURL: 'http://localhost:3006/',  
+    baseURL: 'http://localhost:3007/',  
 });
 
 
